@@ -1,4 +1,6 @@
 ﻿using Market.Entity;
+using Market.ViewModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,25 @@ namespace Market.Controllers
             ServiceReference1.MARKETSoapClient ws = new ServiceReference1.MARKETSoapClient();
             int num = ws.AddOrder(o);
             return View(order);
+        }
+
+        [HttpGet]
+        public ActionResult Basket()
+        {
+            List<Order> o = null;
+            //SampleDataDbContext Data = new SampleDataDbContext();
+            //var dataset = Data.SampleTables.Where(x => x.Name == "MUSTAFA" && x.Surname == "IRK").ToList();            
+            return View(o);
+        }
+
+        [HttpPost]
+        public ActionResult Basket(SearchCriteria SC)
+        {
+            SampleDataDbContext Data = new SampleDataDbContext();
+            var dataset = Data.SampleTables.Where(x => x.Name == SC.Name && x.Surname == SC.Surname).ToList();
+            ViewBag.mesaj = "post";
+            string text = JsonConvert.SerializeObject(dataset);
+            return Json(new { Result = text});
         }
         
     }
